@@ -1,10 +1,10 @@
 // LogoutServlet.java
 package com.cafereview.servlet.auth;
 
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.*;
 import java.io.IOException;
-import javax.servlet.ServletException; 
+import jakarta.servlet.ServletException; 
 
 @WebServlet("/logout")
 public class LogoutServlet extends HttpServlet {
