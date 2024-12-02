@@ -72,7 +72,7 @@ public class ReviewDAO {
         review.setReviewId(rs.getInt("review_id"));
         review.setCafeId(rs.getInt("cafe_id"));
         review.setUserId(rs.getInt("user_id"));
-        review.setRestroomRating(rs.getInt("rating"));
+        review.setRating(rs.getInt("rating"));
         review.setComment(rs.getString("comment"));
         review.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
         

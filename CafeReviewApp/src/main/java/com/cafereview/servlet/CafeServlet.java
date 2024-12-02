@@ -34,7 +34,7 @@ public class CafeServlet extends HttpServlet {
                 Cafe cafe = cafeDAO.findById(cafeId);
                 if (cafe != null) {
                     List<Review> reviews = reviewDAO.findByCafeId(cafeId);
-                    double[] avgRatings = reviewDAO.getAverageRatings(cafeId);
+                    double avgRatings = reviewDAO.getAverageRatings(cafeId);
                     
                     request.setAttribute("cafe", cafe);
                     request.setAttribute("reviews", reviews);

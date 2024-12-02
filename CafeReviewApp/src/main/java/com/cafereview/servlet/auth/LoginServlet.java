@@ -27,7 +27,7 @@ public class LoginServlet extends HttpServlet {
 
         try {
             User user = userDAO.authenticate(username, password);
-            if (user != null && user.isActive()) {
+            if (user != null) {
                 HttpSession session = request.getSession();
                 session.setAttribute("user", user);
                 response.sendRedirect(request.getContextPath() + "/cafes");
