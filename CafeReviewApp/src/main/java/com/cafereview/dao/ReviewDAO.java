@@ -59,8 +59,8 @@ public class ReviewDAO {
             stmt.setInt(1, cafeId);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-			return rs.getDoublt("avg_rating"); 
-                    };
+                		return rs.getDouble("avg_rating"); 
+                    
                 }
             }
         }
