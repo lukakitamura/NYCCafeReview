@@ -4,9 +4,9 @@ package com.cafereview.servlet.auth;
 import com.cafereview.dao.UserDAO;
 import com.cafereview.model.User;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.*;
 import java.io.IOException;
 
 @WebServlet("/register")

@@ -2,7 +2,7 @@
 package com.cafereview.util;
 
 import org.mindrot.jbcrypt.BCrypt;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 public class SecurityUtil {
     public static String hashPassword(String plainPassword) {
