@@ -22,7 +22,6 @@
             integrity="sha256-o9N1jRaa8K2+O1HrG7xYWTWwOaFrRDs+knHsmLvZmRI=" 
             crossorigin=""></script>
 
-    <!-- Optional custom styles for the map -->
     <style>
         #map {
             height: 400px;
