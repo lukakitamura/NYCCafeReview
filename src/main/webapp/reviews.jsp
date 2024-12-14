@@ -22,11 +22,14 @@
             integrity="sha256-o9N1jRaa8K2+O1HrG7xYWTWwOaFrRDs+knHsmLvZmRI=" 
             crossorigin=""></script>
 
+    <!-- Optional custom styles for the map -->
     <style>
         #map {
-            height: 400px;
+            height: 500px;
             width: 100%;
-            margin-bottom: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
         }
     </style>
 </head>
@@ -43,6 +46,7 @@
     <!-- Map Section -->
     <div id="map"></div>
 
+    <!-- Review Form -->
     <div class="review-form">
         <h2>Write a Review</h2>
         <form action="reviews" method="post">
@@ -64,10 +68,14 @@
                 <label for="reviewText">Review:</label>
                 <textarea id="reviewText" name="reviewText" required></textarea>
             </div>
+            <!-- Hidden fields for latitude and longitude -->
+            <input type="hidden" id="latitude" name="latitude">
+            <input type="hidden" id="longitude" name="longitude">
             <button type="submit">Submit Review</button>
         </form>
     </div>
 
+    <!-- Display All Reviews -->
     <div class="reviews">
         <h2>All Reviews</h2>
         <c:forEach items="${reviews}" var="review">
@@ -94,16 +102,29 @@
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    // Dynamically add markers for cafes from the backend
+    // Dynamically add markers for existing reviews
     const cafes = [
         <c:forEach items="${reviews}" var="review">
-            { name: "${review.cafeName}", lat: ${review.latitude}, lng: ${review.longitude} },
+            { name: "${review.cafeName}", lat: ${review.latitude}, lng: ${review.longitude}, rating: "${review.rating}" },
         </c:forEach>
     ];
 
     cafes.forEach(cafe => {
         L.marker([cafe.lat, cafe.lng]).addTo(map)
             .bindPopup(`<b>${cafe.name}</b><br>Rating: ${cafe.rating}/5`);
+    });
+
+    // Add a marker on map click and populate form fields
+    map.on('click', function (e) {
+        const { lat, lng } = e.latlng;
+
+        // Update the hidden fields in the review form
+        document.getElementById('latitude').value = lat.toFixed(6);
+        document.getElementById('longitude').value = lng.toFixed(6);
+
+        // Add the marker to the map
+        const newMarker = L.marker([lat, lng]).addTo(map);
+        newMarker.bindPopup(`Latitude: ${lat.toFixed(4)}, Longitude: ${lng.toFixed(4)}`).openPopup();
     });
 </script>
 </body>
