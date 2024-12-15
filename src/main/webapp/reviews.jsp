@@ -31,6 +31,39 @@
             border-radius: 10px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
         }
+
+        #sidebar {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: white;
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: 250px;
+            max-height: 400px;
+            overflow-y: auto;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        #sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        #sidebar li {
+            cursor: pointer;
+            margin: 5px 0;
+            padding: 5px;
+            background: #f7f7f7;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        #sidebar li:hover {
+            background: #e0e0e0;
+        }
     </style>
 </head>
 <body>
@@ -116,8 +149,25 @@
     ];
 
     cafes.forEach(cafe => {
+        // Add a marker for each cafe
         L.marker([cafe.lat, cafe.lng]).addTo(map)
             .bindPopup(`<b>${cafe.name}</b><br>Rating: ${cafe.rating}/5`);
+    });
+
+    // Populate the sidebar with cafes
+    cafes.forEach((cafe, index) => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${cafe.name} - Rating: ${cafe.rating}/5`;
+
+        // Add click event to zoom to the marker
+        listItem.addEventListener('click', () => {
+            map.setView([cafe.lat, cafe.lng], 15); // Zoom to marker
+            L.popup().setLatLng([cafe.lat, cafe.lng])
+                .setContent(`<b>${cafe.name}</b><br>Rating: ${cafe.rating}/5`)
+                .openOn(map);
+        });
+
+        document.getElementById('cafe-list').appendChild(listItem);
     });
 
     // Add a marker on map click and populate form fields
