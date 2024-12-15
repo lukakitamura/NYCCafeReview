@@ -43,6 +43,12 @@
         </div>
     </div>
 
+    <!-- Sidebar for Cafe Listings -->
+    <div id="sidebar">
+        <h2>Nearby Cafes</h2>
+        <ul id="cafe-list"></ul>
+    </div>
+
     <!-- Map Section -->
     <div id="map"></div>
 
