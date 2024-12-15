@@ -22,7 +22,7 @@
             integrity="sha256-o9N1jRaa8K2+O1HrG7xYWTWwOaFrRDs+knHsmLvZmRI=" 
             crossorigin=""></script>
 
-    <!-- Optional custom styles for the map -->
+    <!-- Optional custom styles for the map and modal -->
     <style>
         #map {
             height: 500px;
@@ -63,6 +63,40 @@
 
         #sidebar li:hover {
             background: #e0e0e0;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 500px;
+            width: 80%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .close-btn {
+            float: right;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .close-btn:hover {
+            color: #ff4444;
         }
     </style>
 </head>
@@ -131,6 +165,15 @@
     </div>
 </div>
 
+<!-- Modal for Cafe Details -->
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2 id="modal-title"></h2>
+        <p id="modal-details"></p>
+    </div>
+</div>
+
 <!-- Map Initialization Script -->
 <script>
     // Initialize the map and set its view to NYC
@@ -148,39 +191,54 @@
         </c:forEach>
     ];
 
-    cafes.forEach(cafe => {
-        // Add a marker for each cafe
-        L.marker([cafe.lat, cafe.lng]).addTo(map)
-            .bindPopup(`<b>${cafe.name}</b><br>Rating: ${cafe.rating}/5`);
+    // Reference modal elements
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDetails = document.getElementById('modal-details');
+    const closeBtn = document.querySelector('.close-btn');
+
+    // Function to open the modal
+    function openModal(cafe) {
+        modalTitle.textContent = cafe.name;
+        modalDetails.innerHTML = `
+            <strong>Rating:</strong> ${cafe.rating}/5<br>
+            <strong>Latitude:</strong> ${cafe.lat}<br>
+            <strong>Longitude:</strong> ${cafe.lng}<br>
+            <em>Additional details about the cafe go here!</em>
+        `;
+        modal.style.display = 'flex';
+    }
+
+    // Close modal functionality
+    closeBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
     });
 
-    // Populate the sidebar with cafes
+    window.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+
+    // Add modal functionality to map markers
+    cafes.forEach(cafe => {
+        const marker = L.marker([cafe.lat, cafe.lng]).addTo(map);
+        marker.on('click', () => {
+            openModal(cafe);
+        });
+    });
+
+    // Add modal functionality to sidebar list items
     cafes.forEach((cafe, index) => {
         const listItem = document.createElement('li');
         listItem.textContent = `${cafe.name} - Rating: ${cafe.rating}/5`;
 
-        // Add click event to zoom to the marker
         listItem.addEventListener('click', () => {
-            map.setView([cafe.lat, cafe.lng], 15); // Zoom to marker
-            L.popup().setLatLng([cafe.lat, cafe.lng])
-                .setContent(`<b>${cafe.name}</b><br>Rating: ${cafe.rating}/5`)
-                .openOn(map);
+            openModal(cafe);
+            map.setView([cafe.lat, cafe.lng], 15);
         });
 
         document.getElementById('cafe-list').appendChild(listItem);
-    });
-
-    // Add a marker on map click and populate form fields
-    map.on('click', function (e) {
-        const { lat, lng } = e.latlng;
-
-        // Update the hidden fields in the review form
-        document.getElementById('latitude').value = lat.toFixed(6);
-        document.getElementById('longitude').value = lng.toFixed(6);
-
-        // Add the marker to the map
-        const newMarker = L.marker([lat, lng]).addTo(map);
-        newMarker.bindPopup(`Latitude: ${lat.toFixed(4)}, Longitude: ${lng.toFixed(4)}`).openPopup();
     });
 </script>
 </body>
