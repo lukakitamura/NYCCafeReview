@@ -13,6 +13,49 @@ body {
     padding: 20px;
 }
 
+/* Sidebar Styling */
+#sidebar {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 250px;
+    max-height: 400px;
+    overflow-y: auto;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* Ensures the sidebar is above the map */
+}
+
+#sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+#sidebar li {
+    cursor: pointer;
+    margin: 5px 0;
+    padding: 5px;
+    background: #f7f7f7;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+#sidebar li:hover {
+    background: #e0e0e0;
+}
+
+/* Map Styling */
+#map {
+    height: 500px;
+    width: 100%;
+    margin: 20px 0;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
 .header {
     display: flex;
     justify-content: space-between;
