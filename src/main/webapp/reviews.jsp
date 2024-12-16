@@ -142,8 +142,16 @@
                 <textarea id="reviewText" name="reviewText" required></textarea>
             </div>
             <!-- Hidden fields for latitude and longitude -->
-            <input type="hidden" id="latitude" name="latitude">
-            <input type="hidden" id="longitude" name="longitude">
+            <div class="form-group">
+                <label>Location (Click on map to select):</label>
+                <div class="location-display">
+                    <span id="selectedLocation">No location selected</span>
+                    <button type="button" id="clearLocation">Clear Location</button>
+                </div>
+                <!-- Hidden inputs for coordinates -->
+                <input type="hidden" id="latitude" name="latitude" required>
+                <input type="hidden" id="longitude" name="longitude" required>
+            </div>
             <button type="submit">Submit Review</button>
         </form>
     </div>
@@ -241,5 +249,52 @@
         document.getElementById('cafe-list').appendChild(listItem);
     });
 </script>
+<script>
+    // Get form elements
+    const form = document.querySelector('form');
+    const latitudeInput = document.getElementById('latitude');
+    const longitudeInput = document.getElementById('longitude');
+    const cafeNameInput = document.getElementById('cafeName');
+
+    // Initialize a marker for the new cafe location
+    let newCafeMarker = null;
+
+    // Add click handler to map for selecting new cafe location
+    map.on('click', function(e) {
+        // Remove existing marker if any
+        if (newCafeMarker) {
+            map.removeLayer(newCafeMarker);
+        }
+
+        // Add new marker
+        newCafeMarker = L.marker(e.latlng).addTo(map);
+
+        // Update form coordinates
+        latitudeInput.value = e.latlng.lat;
+        longitudeInput.value = e.latlng.lng;
+
+        // Optionally, try to get address using reverse geocoding
+        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${e.latlng.lat}&lon=${e.latlng.lng}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.address) {
+                    const cafeName = data.address.cafe || data.address.restaurant || '';
+                    if (cafeName && !cafeNameInput.value) {
+                        cafeNameInput.value = cafeName;
+                    }
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    });
+
+    // Validate form submission
+    form.addEventListener('submit', function(e) {
+        if (!latitudeInput.value || !longitudeInput.value) {
+            e.preventDefault();
+            alert('Please select a location on the map for the cafe.');
+        }
+    });
+</script>
+
 </body>
 </html>

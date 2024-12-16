@@ -139,3 +139,30 @@ button:hover {
 .logout-btn:hover {
     background: #cc0000;
 }
+
+.location-display {
+    background: #f4f4f4;
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#clearLocation {
+    background: #ff4444;
+    padding: 5px 10px;
+    font-size: 0.9em;
+}
+
+#selectedLocation {
+    color: #666;
+    font-style: italic;
+}
+
+.error-message {
+    color: #ff4444;
+    margin-top: 5px;
+    font-size: 0.9em;
+}

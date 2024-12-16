@@ -42,6 +42,8 @@ public class ReviewServlet extends HttpServlet {
         review.setCafeName(req.getParameter("cafeName"));
         review.setRating(Integer.parseInt(req.getParameter("rating")));
         review.setReviewText(req.getParameter("reviewText"));
+        review.setLatitude(Double.parseDouble(req.getParameter("latitude")));
+        review.setLongitude(Double.parseDouble(req.getParameter("longitude")));
 
         try {
             reviewDAO.addReview(review);

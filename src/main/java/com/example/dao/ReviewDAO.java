@@ -8,13 +8,18 @@ import java.util.List;
 
 public class ReviewDAO {
     public void addReview(Review review) throws SQLException {
-        String sql = "INSERT INTO reviews (user_id, cafe_name, rating, review_text) VALUES (?, ?, ?, ?)";
+        String sql = """
+            INSERT INTO reviews (user_id, cafe_name, rating, review_text, latitude, longitude)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """;
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, review.getUserId());
             pstmt.setString(2, review.getCafeName());
             pstmt.setInt(3, review.getRating());
             pstmt.setString(4, review.getReviewText());
+            pstmt.setDouble(5, review.getLatitude());
+            pstmt.setDouble(6, review.getLongitude());
             pstmt.executeUpdate();
         }
     }
@@ -39,6 +44,8 @@ public class ReviewDAO {
                 review.setCafeName(rs.getString("cafe_name"));
                 review.setRating(rs.getInt("rating"));
                 review.setReviewText(rs.getString("review_text"));
+                review.setLatitude(rs.getDouble("latitude"));
+                review.setLongitude(rs.getDouble("longitude"));
                 review.setUsername(rs.getString("username"));
                 review.setCreatedAt(rs.getTimestamp("created_at").toInstant());
                 reviews.add(review);
