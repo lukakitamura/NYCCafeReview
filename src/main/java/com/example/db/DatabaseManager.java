@@ -5,13 +5,13 @@ import java.nio.file.*;
 import java.io.File;
 
 public class DatabaseManager {
-    // Define database location relative to project root
+    // database location relative to project root
     private static final String DB_FILE = "cafe_reviews.db";
     private static final String DB_URL = "jdbc:sqlite:" + DB_FILE;
 
     static {
         try {
-            // Register JDBC driver
+            //  JDBC driver
             Class.forName("org.sqlite.JDBC");
             System.out.println("SQLite JDBC Driver registered successfully");
             initializeDatabase();
@@ -29,7 +29,7 @@ public class DatabaseManager {
             System.out.println("Database connection established");
 
             try (Statement stmt = conn.createStatement()) {
-                // Create tables
+                // create tables
                 System.out.println("Creating users table...");
                 stmt.execute("""
                     CREATE TABLE IF NOT EXISTS users (
@@ -80,7 +80,7 @@ public class DatabaseManager {
                     System.out.println("seating column might already exist: " + e.getMessage());
                 }
 
-                // Verify table structure
+                // verify table structure
                 try (ResultSet rs = stmt.executeQuery("PRAGMA table_info(reviews)")) {
                     System.out.println("Current reviews table columns:");
                     while (rs.next()) {

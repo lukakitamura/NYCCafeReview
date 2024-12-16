@@ -11,7 +11,6 @@ public class DatabaseInitializationListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         System.out.println("Initializing database...");
         try {
-            // This will trigger the static initialization block in DatabaseManager
             Class.forName("com.example.db.DatabaseManager");
             System.out.println("Database initialization completed");
         } catch (ClassNotFoundException e) {

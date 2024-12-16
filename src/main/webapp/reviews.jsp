@@ -110,7 +110,7 @@
                 <button type="button" onclick="resetReviewForm()" class="secondary-btn">Clear Form</button>
             </div>
 
-<%--            <button type="submit">Submit Review</button>--%>
+            <%--            <button type="submit">Submit Review</button>--%>
         </form>
     </div>
 
@@ -177,44 +177,43 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-    // Initialize map centered on NYC
+    // init map centered on NYC
     const map = L.map('map').setView([40.7128, -74.0060], 13);
 
-    // Add OpenStreetMap tiles
+    // OpenStreetMap tiles
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '© OpenStreetMap'
     }).addTo(map);
 
-    // Store current marker
+    // store current marker
     let currentMarker = null;
 
-    // Click handler for map
+    // click handler for map
     map.on('click', function(e) {
-        // Reset cafe name field
+        // reset cafe name field
         document.getElementById('cafeName').readOnly = false;
         document.getElementById('cafeName').value = '';
 
-        // Update coordinates
+        // update coordinates
         const lat = e.latlng.lat;
         const lng = e.latlng.lng;
 
-        // Remove existing marker
+        // remove existing marker
         if (currentMarker) {
             map.removeLayer(currentMarker);
         }
 
-        // Add new marker
         currentMarker = L.marker([lat, lng]).addTo(map);
 
-        // Update form
+        // update form
         document.getElementById('latitude').value = lat;
         document.getElementById('longitude').value = lng;
         document.getElementById('selectedLocation').textContent =
             `New location selected: (${lat.toFixed(6)}, ${lng.toFixed(6)})`;
     });
 
-    // Add markers for existing reviews
+    // add markers for existing reviews
     <c:forEach items="${reviews}" var="review">
     L.marker([${review.latitude}, ${review.longitude}])
         .bindPopup(`
@@ -249,7 +248,7 @@
         .addTo(map);
     </c:forEach>
 
-    // Form validation
+    // form validation
     document.querySelector('form').addEventListener('submit', function(e) {
         if (!document.getElementById('latitude').value ||
             !document.getElementById('longitude').value) {
@@ -259,7 +258,7 @@
     });
 
     function prepareReview(cafeName, lat, lng) {
-        // Fill in the form with existing cafe details
+        // flll form with existing cafe details
         document.getElementById('cafeName').value = cafeName;
         document.getElementById('cafeName').readOnly = true; // Lock the cafe name
         document.getElementById('latitude').value = lat;
@@ -267,25 +266,23 @@
         document.getElementById('selectedLocation').textContent =
             `Selected: ${cafeName} (${lat.toFixed(6)}, ${lng.toFixed(6)})`;
 
-        // Scroll to the review form
         document.querySelector('.review-form').scrollIntoView({
             behavior: 'smooth'
         });
     }
 
     function resetReviewForm() {
-        // Reset all form fields
+        // reset form
         document.querySelector('form').reset();
 
-        // Enable cafe name field
         document.getElementById('cafeName').readOnly = false;
 
-        // Clear location
+        // clear location
         document.getElementById('latitude').value = '';
         document.getElementById('longitude').value = '';
         document.getElementById('selectedLocation').textContent = 'No location selected';
 
-        // Remove current marker if exists
+        // remove current marker
         if (currentMarker) {
             map.removeLayer(currentMarker);
             currentMarker = null;
