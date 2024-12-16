@@ -150,6 +150,37 @@ button:hover {
     align-items: center;
 }
 
+.cafe-popup {
+    min-width: 400px;
+    padding: 5px;
+}
+
+.cafe-ratings {
+    margin: 8px 0;
+    font-size: 0.9em;
+}
+
+.cafe-review {
+    margin: 8px 0;
+    font-style: italic;
+}
+
+.add-review-btn {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    padding: 5px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.add-review-btn:hover {
+    background: #45a049;
+}
+
 #clearLocation {
     background: #ff4444;
     padding: 5px 10px;
@@ -165,4 +196,70 @@ button:hover {
     color: #ff4444;
     margin-top: 5px;
     font-size: 0.9em;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.secondary-btn {
+    background: #666;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.secondary-btn:hover {
+    background: #555;
+}
+
+.ratings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #f8f8f8;
+    border-radius: 4px;
+}
+
+.rating {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+}
+
+.rating-label {
+    font-weight: bold;
+    color: #666;
+}
+
+.rating-value {
+    padding: 2px 8px;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.review-text {
+    margin: 15px 0;
+    padding: 10px;
+    background-color: #fff;
+    border-left: 4px solid #4CAF50;
+    border-radius: 0 4px 4px 0;
+}
+
+.review-meta {
+    display: flex;
+    justify-content: space-between;
+    color: #666;
+    font-size: 0.9em;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
 }

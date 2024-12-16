@@ -13,6 +13,9 @@ public class Review {
     private Instant createdAt;
     private double latitude;
     private double longitude;
+    private String wifi;
+    private String restroom;
+    private String seating;
 
     // Getters and setters
     public int getId() { return id; }
@@ -33,4 +36,10 @@ public class Review {
     public void setLatitude(double latitude) { this.latitude = latitude; }
     public double getLongitude() { return longitude; }
     public void setLongitude(double longitude) { this.longitude = longitude; }
+    public String getWifi() { return wifi; }
+    public void setWifi(String wifi) { this.wifi = wifi; }
+    public String getRestroom() { return restroom; }
+    public void setRestroom(String restroom) { this.restroom = restroom; }
+    public String getSeating() { return seating; }
+    public void setSeating(String seating) { this.seating = seating; }
 }
