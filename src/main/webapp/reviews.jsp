@@ -12,91 +12,19 @@
 <head>
     <title>Cafe Reviews</title>
     <link rel="stylesheet" href="css/style.css">
-
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
-          integrity="sha256-xodZBNTC5n17Xt2bCMJ6Et5gkA5ChD9KR8eG3kD+7Ew=" 
-          crossorigin=""/>
-    <!-- Leaflet JavaScript -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
-            integrity="sha256-o9N1jRaa8K2+O1HrG7xYWTWwOaFrRDs+knHsmLvZmRI=" 
-            crossorigin=""></script>
-
-    <!-- Optional custom styles for the map and modal -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <style>
         #map {
             height: 500px;
             width: 100%;
             margin: 20px 0;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
         }
-
-        #sidebar {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: white;
-            border: 1px solid #ccc;
-            padding: 10px;
-            width: 250px;
-            max-height: 400px;
-            overflow-y: auto;
-            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-        }
-
-        #sidebar ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        #sidebar li {
-            cursor: pointer;
-            margin: 5px 0;
-            padding: 5px;
-            background: #f7f7f7;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            transition: background 0.3s;
-        }
-
-        #sidebar li:hover {
-            background: #e0e0e0;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-        }
-
-        .modal-content {
-            background: white;
+        .review-form {
+            margin-top: 20px;
             padding: 20px;
-            border-radius: 5px;
-            max-width: 500px;
-            width: 80%;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .close-btn {
-            float: right;
-            font-size: 1.5rem;
-            font-weight: bold;
-            cursor: pointer;
-            color: #333;
-        }
-
-        .close-btn:hover {
-            color: #ff4444;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
     </style>
 </head>
@@ -110,13 +38,7 @@
         </div>
     </div>
 
-    <!-- Sidebar for Cafe Listings -->
-    <div id="sidebar">
-        <h2>Nearby Cafes</h2>
-        <ul id="cafe-list"></ul>
-    </div>
-
-    <!-- Map Section -->
+    <!-- Map Container -->
     <div id="map"></div>
 
     <!-- Review Form -->
@@ -127,8 +49,9 @@
                 <label for="cafeName">Cafe Name:</label>
                 <input type="text" id="cafeName" name="cafeName" required>
             </div>
+
             <div class="form-group">
-                <label for="rating">Rating:</label>
+                <label for="rating">Overall Rating:</label>
                 <select id="rating" name="rating" required>
                     <option value="5">5 - Excellent</option>
                     <option value="4">4 - Very Good</option>
@@ -137,32 +60,111 @@
                     <option value="1">1 - Poor</option>
                 </select>
             </div>
+
+            <div class="form-group">
+                <label for="wifi">WiFi Availability:</label>
+                <select id="wifi" name="wifi" required>
+                    <option value="EXCELLENT">Excellent - Fast & Reliable</option>
+                    <option value="GOOD">Good - Works Well</option>
+                    <option value="FAIR">Fair - Sometimes Slow</option>
+                    <option value="POOR">Poor - Unreliable</option>
+                    <option value="NONE">No WiFi Available</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="restroom">Restroom Availability:</label>
+                <select id="restroom" name="restroom" required>
+                    <option value="PUBLIC">Public - Freely Available</option>
+                    <option value="CUSTOMERS">Customers Only</option>
+                    <option value="KEY">Available with Key/Code</option>
+                    <option value="NONE">Not Available</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="seating">Seating Availability:</label>
+                <select id="seating" name="seating" required>
+                    <option value="PLENTY">Plenty - Always Available</option>
+                    <option value="MODERATE">Moderate - Usually Available</option>
+                    <option value="LIMITED">Limited - Often Full</option>
+                    <option value="MINIMAL">Minimal - Very Few Seats</option>
+                    <option value="NONE">No Seating Available</option>
+                </select>
+            </div>
+
             <div class="form-group">
                 <label for="reviewText">Review:</label>
                 <textarea id="reviewText" name="reviewText" required></textarea>
             </div>
-            <!-- Hidden fields for latitude and longitude -->
+
             <div class="form-group">
-                <label>Location (Click on map to select):</label>
-                <div class="location-display">
-                    <span id="selectedLocation">No location selected</span>
-                    <button type="button" id="clearLocation">Clear Location</button>
-                </div>
-                <!-- Hidden inputs for coordinates -->
+                <label>Selected Location:</label>
+                <div id="selectedLocation">No location selected</div>
                 <input type="hidden" id="latitude" name="latitude" required>
                 <input type="hidden" id="longitude" name="longitude" required>
             </div>
-            <button type="submit">Submit Review</button>
+
+            <div class="form-actions">
+                <button type="submit">Submit Review</button>
+                <button type="button" onclick="resetReviewForm()" class="secondary-btn">Clear Form</button>
+            </div>
+
+<%--            <button type="submit">Submit Review</button>--%>
         </form>
     </div>
 
+    <!-- Reviews List -->
     <!-- Display All Reviews -->
     <div class="reviews">
-        <h2>All Reviews</h2>
+        <h2>Recent Reviews</h2>
         <c:forEach items="${reviews}" var="review">
             <div class="review">
                 <h3>${review.cafeName}</h3>
-                <div class="rating">Rating: ${review.rating}/5</div>
+                <div class="ratings-grid">
+                    <div class="rating">
+                        <span class="rating-label">Overall Rating:</span>
+                        <span class="rating-value">${review.rating}/5</span>
+                    </div>
+                    <div class="rating">
+                        <span class="rating-label">WiFi:</span>
+                        <span class="rating-value">
+                        <c:choose>
+                            <c:when test="${review.wifi == 'EXCELLENT'}">Excellent - Fast & Reliable</c:when>
+                            <c:when test="${review.wifi == 'GOOD'}">Good - Works Well</c:when>
+                            <c:when test="${review.wifi == 'FAIR'}">Fair - Sometimes Slow</c:when>
+                            <c:when test="${review.wifi == 'POOR'}">Poor - Unreliable</c:when>
+                            <c:when test="${review.wifi == 'NONE'}">No WiFi Available</c:when>
+                            <c:otherwise>${review.wifi}</c:otherwise>
+                        </c:choose>
+                    </span>
+                    </div>
+                    <div class="rating">
+                        <span class="rating-label">Restroom:</span>
+                        <span class="rating-value">
+                        <c:choose>
+                            <c:when test="${review.restroom == 'PUBLIC'}">Public - Freely Available</c:when>
+                            <c:when test="${review.restroom == 'CUSTOMERS'}">Customers Only</c:when>
+                            <c:when test="${review.restroom == 'KEY'}">Available with Key/Code</c:when>
+                            <c:when test="${review.restroom == 'NONE'}">Not Available</c:when>
+                            <c:otherwise>${review.restroom}</c:otherwise>
+                        </c:choose>
+                    </span>
+                    </div>
+                    <div class="rating">
+                        <span class="rating-label">Seating:</span>
+                        <span class="rating-value">
+                        <c:choose>
+                            <c:when test="${review.seating == 'PLENTY'}">Plenty - Always Available</c:when>
+                            <c:when test="${review.seating == 'MODERATE'}">Moderate - Usually Available</c:when>
+                            <c:when test="${review.seating == 'LIMITED'}">Limited - Often Full</c:when>
+                            <c:when test="${review.seating == 'MINIMAL'}">Minimal - Very Few Seats</c:when>
+                            <c:when test="${review.seating == 'NONE'}">No Seating Available</c:when>
+                            <c:otherwise>${review.seating}</c:otherwise>
+                        </c:choose>
+                    </span>
+                    </div>
+                </div>
                 <div class="review-text">${review.reviewText}</div>
                 <div class="review-meta">
                     Posted by ${review.username}
@@ -173,214 +175,122 @@
     </div>
 </div>
 
-<!-- Modal for Cafe Details -->
-<div id="modal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn">&times;</span>
-        <h2 id="modal-title"></h2>
-        <p id="modal-details"></p>
-    </div>
-</div>
-
-<!-- Map Initialization Script -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-    // Initialize the map and set its view to NYC
-    const map = L.map('map').setView([40.7128, -74.0060], 13); // NYC coordinates, zoom level 13
+    // Initialize map centered on NYC
+    const map = L.map('map').setView([40.7128, -74.0060], 13);
 
     // Add OpenStreetMap tiles
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap'
     }).addTo(map);
 
-    // Dynamically add markers for existing reviews
-    const cafes = [
-        <c:forEach items="${reviews}" var="review">
-            { name: "${review.cafeName}", lat: ${review.latitude}, lng: ${review.longitude}, rating: "${review.rating}" },
-        </c:forEach>
-    ];
-
-    // Reference modal elements
-    const modal = document.getElementById('modal');
-    const modalTitle = document.getElementById('modal-title');
-    const modalDetails = document.getElementById('modal-details');
-    const closeBtn = document.querySelector('.close-btn');
-
-    // Function to open the modal
-    function openModal(cafe) {
-        modalTitle.textContent = cafe.name;
-        modalDetails.innerHTML = `
-            <strong>Rating:</strong> ${cafe.rating}/5<br>
-            <strong>Latitude:</strong> ${cafe.lat}<br>
-            <strong>Longitude:</strong> ${cafe.lng}<br>
-            <em>Additional details about the cafe go here!</em>
-        `;
-        modal.style.display = 'flex';
-    }
-
-    // Close modal functionality
-    closeBtn.addEventListener('click', () => {
-        modal.style.display = 'none';
-    });
-
-    window.addEventListener('click', (event) => {
-        if (event.target === modal) {
-            modal.style.display = 'none';
-        }
-    });
-
-    // Add modal functionality to map markers
-    cafes.forEach(cafe => {
-        const marker = L.marker([cafe.lat, cafe.lng]).addTo(map);
-        marker.on('click', () => {
-            openModal(cafe);
-        });
-    });
-
-    // Add modal functionality to sidebar list items
-    cafes.forEach((cafe, index) => {
-        const listItem = document.createElement('li');
-        listItem.textContent = `${cafe.name} - Rating: ${cafe.rating}/5`;
-
-        listItem.addEventListener('click', () => {
-            openModal(cafe);
-            map.setView([cafe.lat, cafe.lng], 15);
-        });
-
-        document.getElementById('cafe-list').appendChild(listItem);
-    });
-</script>
-<script>
-    // Get form elements
-    const form = document.querySelector('form');
-    const latitudeInput = document.getElementById('latitude');
-    const longitudeInput = document.getElementById('longitude');
-    const cafeNameInput = document.getElementById('cafeName');
-
-    // Initialize a marker for the new cafe location
-    let newCafeMarker = null;
-
-    // Add click handler to map for selecting new cafe location
-    map.on('click', function(e) {
-        // Remove existing marker if any
-        if (newCafeMarker) {
-            map.removeLayer(newCafeMarker);
-        }
-
-        // Add new marker
-        newCafeMarker = L.marker(e.latlng).addTo(map);
-
-        // Update form coordinates
-        latitudeInput.value = e.latlng.lat;
-        longitudeInput.value = e.latlng.lng;
-
-        // Optionally, try to get address using reverse geocoding
-        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${e.latlng.lat}&lon=${e.latlng.lng}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.address) {
-                    const cafeName = data.address.cafe || data.address.restaurant || '';
-                    if (cafeName && !cafeNameInput.value) {
-                        cafeNameInput.value = cafeName;
-                    }
-                }
-            })
-            .catch(error => console.error('Error:', error));
-    });
-
-    // Validate form submission
-    form.addEventListener('submit', function(e) {
-        if (!latitudeInput.value || !longitudeInput.value) {
-            e.preventDefault();
-            alert('Please select a location on the map for the cafe.');
-        }
-    });
-</script>
-
-<script>
-    // Get form elements
-    const form = document.querySelector('form');
-    const latitudeInput = document.getElementById('latitude');
-    const longitudeInput = document.getElementById('longitude');
-    const selectedLocationSpan = document.getElementById('selectedLocation');
-    const clearLocationBtn = document.getElementById('clearLocation');
+    // Store current marker
     let currentMarker = null;
 
-    // Initialize the map (your existing map initialization code)
-    const map = L.map('map').setView([40.7128, -74.0060], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-
-    // Add click handler to map
+    // Click handler for map
     map.on('click', function(e) {
-        // Remove existing marker if any
+        // Reset cafe name field
+        document.getElementById('cafeName').readOnly = false;
+        document.getElementById('cafeName').value = '';
+
+        // Update coordinates
+        const lat = e.latlng.lat;
+        const lng = e.latlng.lng;
+
+        // Remove existing marker
         if (currentMarker) {
             map.removeLayer(currentMarker);
         }
 
         // Add new marker
-        currentMarker = L.marker(e.latlng).addTo(map);
+        currentMarker = L.marker([lat, lng]).addTo(map);
 
-        // Update form values
-        latitudeInput.value = e.latlng.lat;
-        longitudeInput.value = e.latlng.lng;
-        selectedLocationSpan.textContent = `Selected: (${e.latlng.lat.toFixed(6)}, ${e.latlng.lng.toFixed(6)})`;
-
-        // Try to get address using reverse geocoding
-        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${e.latlng.lat}&lon=${e.latlng.lng}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.display_name) {
-                    selectedLocationSpan.textContent = data.display_name;
-                }
-            })
-            .catch(error => console.error('Error:', error));
+        // Update form
+        document.getElementById('latitude').value = lat;
+        document.getElementById('longitude').value = lng;
+        document.getElementById('selectedLocation').textContent =
+            `New location selected: (${lat.toFixed(6)}, ${lng.toFixed(6)})`;
     });
 
-    // Clear location button handler
-    clearLocationBtn.addEventListener('click', function() {
+    // Add markers for existing reviews
+    <c:forEach items="${reviews}" var="review">
+    L.marker([${review.latitude}, ${review.longitude}])
+        .bindPopup(`
+            <div class="cafe-popup">
+                <strong>${review.cafeName}</strong><br>
+                <div class="cafe-ratings">
+                    Overall Rating: ${review.rating}/5<br>
+                    WiFi: ${review.wifi == 'EXCELLENT' ? 'Excellent - Fast & Reliable' :
+                          review.wifi == 'GOOD' ? 'Good - Works Well' :
+                          review.wifi == 'FAIR' ? 'Fair - Sometimes Slow' :
+                          review.wifi == 'POOR' ? 'Poor - Unreliable' :
+                          'No WiFi Available'}<br>
+                    Restroom: ${review.restroom == 'PUBLIC' ? 'Public - Freely Available' :
+                             review.restroom == 'CUSTOMERS' ? 'Customers Only' :
+                             review.restroom == 'KEY' ? 'Available with Key/Code' :
+                             'Not Available'}<br>
+                    Seating: ${review.seating == 'PLENTY' ? 'Plenty - Always Available' :
+                            review.seating == 'MODERATE' ? 'Moderate - Usually Available' :
+                            review.seating == 'LIMITED' ? 'Limited - Often Full' :
+                            review.seating == 'MINIMAL' ? 'Minimal - Very Few Seats' :
+                            'No Seating Available'}
+                </div>
+                <hr>
+                <div class="cafe-review">${review.reviewText}</div>
+                <small>By: ${review.username}</small>
+                <button onclick="prepareReview('${review.cafeName}', ${review.latitude}, ${review.longitude})"
+                        class="add-review-btn">
+                    Add Your Review
+                </button>
+            </div>
+        `)
+        .addTo(map);
+    </c:forEach>
+
+    // Form validation
+    document.querySelector('form').addEventListener('submit', function(e) {
+        if (!document.getElementById('latitude').value ||
+            !document.getElementById('longitude').value) {
+            e.preventDefault();
+            alert('Please select a location on the map');
+        }
+    });
+
+    function prepareReview(cafeName, lat, lng) {
+        // Fill in the form with existing cafe details
+        document.getElementById('cafeName').value = cafeName;
+        document.getElementById('cafeName').readOnly = true; // Lock the cafe name
+        document.getElementById('latitude').value = lat;
+        document.getElementById('longitude').value = lng;
+        document.getElementById('selectedLocation').textContent =
+            `Selected: ${cafeName} (${lat.toFixed(6)}, ${lng.toFixed(6)})`;
+
+        // Scroll to the review form
+        document.querySelector('.review-form').scrollIntoView({
+            behavior: 'smooth'
+        });
+    }
+
+    function resetReviewForm() {
+        // Reset all form fields
+        document.querySelector('form').reset();
+
+        // Enable cafe name field
+        document.getElementById('cafeName').readOnly = false;
+
+        // Clear location
+        document.getElementById('latitude').value = '';
+        document.getElementById('longitude').value = '';
+        document.getElementById('selectedLocation').textContent = 'No location selected';
+
+        // Remove current marker if exists
         if (currentMarker) {
             map.removeLayer(currentMarker);
             currentMarker = null;
         }
-        latitudeInput.value = '';
-        longitudeInput.value = '';
-        selectedLocationSpan.textContent = 'No location selected';
-    });
-
-    // Form validation
-    form.addEventListener('submit', function(e) {
-        if (!latitudeInput.value || !longitudeInput.value) {
-            e.preventDefault();
-            alert('Please select a location on the map before submitting the review.');
-        }
-    });
-
-    // Add markers for existing reviews
-    const reviews = [
-        <c:forEach items="${reviews}" var="review">
-        {
-            lat: ${review.latitude},
-            lng: ${review.longitude},
-            name: "${review.cafeName}",
-            rating: ${review.rating},
-            text: "${review.reviewText}",
-            username: "${review.username}"
-        },
-        </c:forEach>
-    ];
-
-    // Add markers for existing reviews
-    reviews.forEach(review => {
-        const marker = L.marker([review.lat, review.lng]).addTo(map);
-        marker.bindPopup(`
-            <strong>${review.name}</strong><br>
-            Rating: ${review.rating}/5<br>
-            Review: ${review.text}<br>
-            By: ${review.username}
-        `);
-    });
+    }
 </script>
-
 </body>
 </html>

@@ -48,6 +48,9 @@ public class DatabaseManager {
                         user_id INTEGER NOT NULL,
                         cafe_name TEXT NOT NULL,
                         rating INTEGER NOT NULL CHECK (rating BETWEEN 1 AND 5),
+                        wifi TEXT NOT NULL,
+                        restroom TEXT NOT NULL,
+                        seating TEXT NOT NULL,
                         review_text TEXT NOT NULL,
                         latitude DOUBLE NOT NULL,
                         longitude DOUBLE NOT NULL,
@@ -56,16 +59,35 @@ public class DatabaseManager {
                     )
                 """);
                 System.out.println("Reviews table created successfully");
+                try {
+                    stmt.execute("ALTER TABLE reviews ADD COLUMN wifi TEXT DEFAULT 'NONE'");
+                    System.out.println("Added wifi column");
+                } catch (SQLException e) {
+                    System.out.println("wifi column might already exist: " + e.getMessage());
+                }
 
-                // Verify tables were created
-                try (ResultSet rs = stmt.executeQuery("SELECT name FROM sqlite_master WHERE type='table'")) {
-                    System.out.println("Existing tables in database:");
+                try {
+                    stmt.execute("ALTER TABLE reviews ADD COLUMN restroom TEXT DEFAULT 'NONE'");
+                    System.out.println("Added restroom column");
+                } catch (SQLException e) {
+                    System.out.println("restroom column might already exist: " + e.getMessage());
+                }
+
+                try {
+                    stmt.execute("ALTER TABLE reviews ADD COLUMN seating TEXT DEFAULT 'NONE'");
+                    System.out.println("Added seating column");
+                } catch (SQLException e) {
+                    System.out.println("seating column might already exist: " + e.getMessage());
+                }
+
+                // Verify table structure
+                try (ResultSet rs = stmt.executeQuery("PRAGMA table_info(reviews)")) {
+                    System.out.println("Current reviews table columns:");
                     while (rs.next()) {
-                        System.out.println(" - " + rs.getString("name"));
+                        System.out.println(" - " + rs.getString("name") + " (" + rs.getString("type") + ")");
                     }
                 }
             }
-            System.out.println("Database initialization completed successfully");
         } catch (SQLException e) {
             System.err.println("Database initialization failed: " + e.getMessage());
             e.printStackTrace();

@@ -41,6 +41,9 @@ public class ReviewServlet extends HttpServlet {
         review.setUserId(user.getId());
         review.setCafeName(req.getParameter("cafeName"));
         review.setRating(Integer.parseInt(req.getParameter("rating")));
+        review.setWifi(req.getParameter("wifi"));
+        review.setRestroom(req.getParameter("restroom"));
+        review.setSeating(req.getParameter("seating"));
         review.setReviewText(req.getParameter("reviewText"));
         review.setLatitude(Double.parseDouble(req.getParameter("latitude")));
         review.setLongitude(Double.parseDouble(req.getParameter("longitude")));
