@@ -10,7 +10,6 @@ import java.io.File;
 
 public class Main {
     public static void main(String[] args) throws LifecycleException {
-
         String webappDirLocation = "src/main/webapp/";
         Tomcat tomcat = new Tomcat();
 
@@ -21,15 +20,25 @@ public class Main {
                 new File(webappDirLocation).getAbsolutePath());
 
         File additionWebInfClasses = new File("target/classes");
-        File additionWebInfLib = new File("target/lib");
-
         WebResourceRoot resources = new StandardRoot(context);
+
+        // Add classes directory
         resources.addPreResources(new DirResourceSet(resources,
                 "/WEB-INF/classes",
                 additionWebInfClasses.getAbsolutePath(), "/"));
+
+        // Add lib directory
+        File libDirectory = new File("target/lib");
+        if (libDirectory.exists()) {
+            resources.addPreResources(new DirResourceSet(resources,
+                    "/WEB-INF/lib",
+                    libDirectory.getAbsolutePath(), "/"));
+        }
+
         context.setResources(resources);
 
         tomcat.start();
+        System.out.println("Server started at http://localhost:8080");
         tomcat.getServer().await();
     }
 }
