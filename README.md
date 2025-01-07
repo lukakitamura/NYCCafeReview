@@ -19,4 +19,3 @@ Frontend:
 - Glassfish for Jakarta Server Pages
     - HTML and CSS 
 - OpenStreetMap API 
--
